@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace SouthPointe\Dumper;
+namespace Kirameki\Dumper;
 
+use Kirameki\Dumper\Configs\DebugInfo;
 use ReflectionProperty;
-use SouthPointe\Dumper\Configs\DebugInfo;
 use const PHP_SAPI;
 
 class Config

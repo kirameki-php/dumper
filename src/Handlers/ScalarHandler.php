@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 
-namespace SouthPointe\Dumper\Handlers;
+namespace Kirameki\Dumper\Handlers;
 
-use SouthPointe\Ansi\Ansi;
 use SouthPointe\Ansi\Codes\Color;
 use function explode;
 use function implode;

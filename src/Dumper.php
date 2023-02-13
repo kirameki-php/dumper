@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace SouthPointe\Dumper;
+namespace Kirameki\Dumper;
 
-use SouthPointe\Dumper\Decorators\AnsiDecorator;
-use SouthPointe\Dumper\Decorators\Decorator;
-use SouthPointe\Dumper\Decorators\HtmlDecorator;
-use SouthPointe\Dumper\Decorators\PlainDecorator;
+use Kirameki\Dumper\Decorators\AnsiDecorator;
+use Kirameki\Dumper\Decorators\Decorator;
+use Kirameki\Dumper\Decorators\HtmlDecorator;
+use Kirameki\Dumper\Decorators\PlainDecorator;
 
 class Dumper
 {

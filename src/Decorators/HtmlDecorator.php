@@ -1,11 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace SouthPointe\Dumper\Decorators;
+namespace Kirameki\Dumper\Decorators;
 
-use SouthPointe\Ansi\Ansi;
+use Kirameki\Dumper\Config;
 use SouthPointe\Ansi\Codes\Color;
-use SouthPointe\Dumper\Config;
-use function dechex;
 use function implode;
 use function str_repeat;
 use const PHP_EOL;

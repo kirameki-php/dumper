@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace SouthPointe\Dumper\Handlers;
+namespace Kirameki\Dumper\Handlers;
 
 use ReflectionReference;
 use SouthPointe\Ansi\Codes\Color;

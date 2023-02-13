@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace SouthPointe\Dumper\Handlers;
+namespace Kirameki\Dumper\Handlers;
 
+use Kirameki\Dumper\Configs\DebugInfo;
 use ReflectionClass;
 use ReflectionProperty;
 use SouthPointe\Ansi\Codes\Color;
-use SouthPointe\Dumper\Configs\DebugInfo;
 use function array_key_exists;
 use function array_merge;
 use function count;

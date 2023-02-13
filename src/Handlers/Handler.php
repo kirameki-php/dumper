@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace SouthPointe\Dumper\Handlers;
+namespace Kirameki\Dumper\Handlers;
 
+use Kirameki\Dumper\Config;
+use Kirameki\Dumper\Decorators\Decorator;
+use Kirameki\Dumper\Formatter;
 use SouthPointe\Ansi\Codes\Color;
-use SouthPointe\Dumper\Config;
-use SouthPointe\Dumper\Decorators\Decorator;
-use SouthPointe\Dumper\Formatter;
 use function is_int;
 
 abstract class Handler

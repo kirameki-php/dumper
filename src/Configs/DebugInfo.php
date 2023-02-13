@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace SouthPointe\Dumper\Configs;
+namespace Kirameki\Dumper\Configs;
 
 enum DebugInfo
 {

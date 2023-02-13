@@ -1,20 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace SouthPointe\Dumper;
+namespace Kirameki\Dumper;
 
 use Closure;
 use DateTime;
-use SouthPointe\Dumper\Decorators\Decorator;
-use SouthPointe\Dumper\Handlers\ArrayHandler;
-use SouthPointe\Dumper\Handlers\ClassHandler;
-use SouthPointe\Dumper\Handlers\ClassHandlerFactory;
-use SouthPointe\Dumper\Handlers\ClosureHandler;
-use SouthPointe\Dumper\Handlers\DateTimeHandler;
-use SouthPointe\Dumper\Handlers\EnumHandler;
-use SouthPointe\Dumper\Handlers\NullHandler;
-use SouthPointe\Dumper\Handlers\ResourceHandler;
-use SouthPointe\Dumper\Handlers\ScalarHandler;
-use SouthPointe\Dumper\Handlers\ThrowableHandler;
+use Kirameki\Dumper\Decorators\Decorator;
+use Kirameki\Dumper\Handlers\ArrayHandler;
+use Kirameki\Dumper\Handlers\ClassHandler;
+use Kirameki\Dumper\Handlers\ClassHandlerFactory;
+use Kirameki\Dumper\Handlers\ClosureHandler;
+use Kirameki\Dumper\Handlers\DateTimeHandler;
+use Kirameki\Dumper\Handlers\EnumHandler;
+use Kirameki\Dumper\Handlers\NullHandler;
+use Kirameki\Dumper\Handlers\ResourceHandler;
+use Kirameki\Dumper\Handlers\ScalarHandler;
+use Kirameki\Dumper\Handlers\ThrowableHandler;
 use Throwable;
 use UnitEnum;
 use function get_debug_type;

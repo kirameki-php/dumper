@@ -1,13 +1,12 @@
 {
-  "name": "south-pointe/dumper",
+  "name": "kirameki/dumper",
   "description": "Data dumper for PHP",
   "type": "library",
   "license": "MIT",
   "require": {
     "php": ">= 8.2",
     "ext-mbstring": "*",
-    "south-pointe/ansi": "dev-main",
-    "webmozart/assert": "^1.1"
+    "south-pointe/ansi": "dev-main"
   },
   "require-dev": {
     "phpstan/phpstan": "^1.9",
@@ -15,7 +14,7 @@
   },
   "autoload": {
     "psr-4": {
-      "SouthPointe\\Dumper\\": "src/"
+      "Kirameki\\Dumper\\": "src/"
     },
     "files": [
       "src/functions.php"
@@ -23,7 +22,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\SouthPointe\\Dumper\\": "tests/src/"
+      "Tests\\Kirameki\\Dumper\\": "tests/src/"
     }
   },
   "config": {

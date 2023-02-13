@@ -3,16 +3,15 @@
 namespace Tests\SouthPointe\Dumper;
 
 use DateTime;
-use SouthPointe\Ansi\Ansi;
-use SouthPointe\Dumper\Config;
-use SouthPointe\Dumper\Dumper;
-use SouthPointe\Dumper\Writer;
-use Tests\SouthPointe\Dumper\Samples\CircularClass;
-use Tests\SouthPointe\Dumper\Samples\ContextualException;
-use Tests\SouthPointe\Dumper\Samples\DebuggableClass;
-use Tests\SouthPointe\Dumper\Samples\SimpleBackedEnum;
-use Tests\SouthPointe\Dumper\Samples\SimpleClass;
-use Tests\SouthPointe\Dumper\Samples\SimpleEnum;
+use Kirameki\Dumper\Config;
+use Kirameki\Dumper\Dumper;
+use Kirameki\Dumper\Writer;
+use Tests\Kirameki\Dumper\Samples\CircularClass;
+use Tests\Kirameki\Dumper\Samples\ContextualException;
+use Tests\Kirameki\Dumper\Samples\DebuggableClass;
+use Tests\Kirameki\Dumper\Samples\SimpleBackedEnum;
+use Tests\Kirameki\Dumper\Samples\SimpleClass;
+use Tests\Kirameki\Dumper\Samples\SimpleEnum;
 use function assert;
 use function fclose;
 use function fopen;
@@ -21,7 +20,6 @@ use function is_resource;
 use function tmpfile;
 use const INF;
 use const NAN;
-use const PHP_EOL;
 use const STDIN;
 
 class DumpTest extends TestCase

@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
-use SouthPointe\Dumper\Config;
-use SouthPointe\Dumper\Dumper;
+use Kirameki\Dumper\Config;
+use Kirameki\Dumper\Dumper;
 
 if (!function_exists('dump'))
 {

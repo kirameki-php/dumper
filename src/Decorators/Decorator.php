@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace SouthPointe\Dumper\Decorators;
+namespace Kirameki\Dumper\Decorators;
 
 use SouthPointe\Ansi\Codes\Color;
 
