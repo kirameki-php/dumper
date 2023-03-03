@@ -22,7 +22,7 @@ class ClassHandler extends Handler
      */
     public function handle(object $var, int $id, int $depth, array $objectIds): string
     {
-        $properties = $this->getProperties($var);
+        $properties = $this->getProperties(clone $var);
 
         $summary =
             $this->colorizeName($var::class) . ' ' .
