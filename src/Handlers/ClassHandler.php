@@ -3,7 +3,7 @@
 namespace Kirameki\Dumper\Handlers;
 
 use Kirameki\Dumper\Configs\DebugInfo;
-use ReflectionClass;
+use ReflectionObject;
 use ReflectionProperty;
 use SouthPointe\Ansi\Codes\Color;
 use function array_key_exists;
@@ -72,8 +72,8 @@ class ClassHandler extends Handler
             }
         }
 
-        $classReflection = new ReflectionClass($var);
-        $propertyReflections = $classReflection->getProperties(
+        $objReflection = new ReflectionObject($var);
+        $propertyReflections = $objReflection->getProperties(
             $this->config->propertyFilter,
         );
 
