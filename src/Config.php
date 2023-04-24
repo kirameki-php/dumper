@@ -3,6 +3,10 @@
 namespace Kirameki\Dumper;
 
 use Kirameki\Dumper\Configs\DebugInfo;
+use Kirameki\Dumper\Decorators\AnsiDecorator;
+use Kirameki\Dumper\Decorators\Decorator;
+use Kirameki\Dumper\Decorators\HtmlDecorator;
+use Kirameki\Dumper\Decorators\PlainDecorator;
 use ReflectionProperty;
 use const PHP_SAPI;
 
@@ -15,21 +19,60 @@ class Config
         ReflectionProperty::IS_PRIVATE;
 
     /**
+     * @var Formatter
+     */
+    public readonly Formatter $formatter;
+
+    /**
+     * @param Formatter|null $formatter
+     * @param Writer $writer
+     * @param string|null $decorator
      * @param int $indentSize
      * @param int $maxStringLength
-     * @param string $decorator
      * @param string $dateTimeFormat
      * @param int $propertyFilter
      * @param DebugInfo $debugInfo
      */
     public function __construct(
-        public readonly string $decorator = PHP_SAPI,
+        ?Formatter $formatter = null,
+        public readonly ?string $decorator = null,
         public readonly int $indentSize = 2,
         public readonly int $maxStringLength = 5000,
         public readonly string $dateTimeFormat = 'Y-m-d H:i:s.u T (P)',
         public readonly int $propertyFilter = self::PROPERTY_FILTER_DEFAULT,
         public readonly DebugInfo $debugInfo = DebugInfo::Overwrite,
+        public readonly Writer $writer = new Writer(),
     )
     {
+        $this->formatter = $formatter ?? $this->makeFormatter();
+    }
+
+    /**
+     * @return Formatter
+     */
+    protected function makeFormatter(): Formatter
+    {
+        return new Formatter($this->makeDefaultDecorator(), $this);
+    }
+
+    /**
+     * @return Decorator
+     */
+    protected function makeDefaultDecorator(): Decorator
+    {
+        return match ($this->decorator ?? $this->guessDecoratorName()) {
+            'cli' => new AnsiDecorator($this),
+            'html' => new HtmlDecorator($this),
+            default => new PlainDecorator($this),
+        };
+    }
+
+    protected function guessDecoratorName(): string
+    {
+        return match (true) {
+            PHP_SAPI === 'cli' => 'cli',
+            isset($_SERVER['HTTPS']) => 'html',
+            default => 'plain',
+        };
     }
 }

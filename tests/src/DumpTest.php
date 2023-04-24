@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Tests\SouthPointe\Dumper;
+namespace Tests\Kirameki\Dumper;
 
 use DateTime;
 use Kirameki\Dumper\Config;
@@ -82,8 +82,10 @@ class DumpTest extends TestCase
         $b = (($code - 16) % 6) * 51;
 
         $vd = new Dumper(
-            writer: new Writer($resource),
-            config: new Config(decorator: 'html')
+            config: new Config(
+                decorator: 'html',
+                writer: new Writer($resource),
+            ),
         );
         $vd->dump($vars);
 
