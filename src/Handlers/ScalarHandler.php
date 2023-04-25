@@ -12,9 +12,11 @@ use function is_int;
 use function is_nan;
 use function mb_ord;
 use function mb_strcut;
+use function mb_strlen;
 use function preg_replace_callback_array;
 use function sprintf;
 use function str_contains;
+use function substr;
 
 class ScalarHandler extends Handler
 {
@@ -87,30 +89,33 @@ class ScalarHandler extends Handler
         }
 
         // Replace control and space chars with raw string representation.
-        $var = (string)preg_replace_callback_array([
+        $decorated = (string)preg_replace_callback_array([
             '/[\pC]/u' => fn(array $match) => $this->handleControlChar($match[0]),
             '/[\pZ]/u' => fn(array $match) => $this->handleSpaceChar($match[0]),
         ], $var);
 
         if ($tooLong) {
-            $var .= $this->colorizeComment(' … <truncated>');
+            $decorated .= $this->colorizeComment(' … <truncated>');
         }
 
         if ($singleLine) {
             return
                 $this->colorizeComment('"') .
-                $this->colorizeScalar($var) .
+                $this->colorizeScalar($decorated) .
                 $this->colorizeComment('"');
         }
 
         $string = $this->colorizeComment('"""') . $this->eol();
         $parts = [];
-        foreach (explode('\n', $var) as $line) {
+        foreach (explode('\n', $decorated) as $line) {
             $parts[] = $this->indent($this->colorizeScalar($line), $depth + 1);
         }
         $string .= implode($this->colorizeEscaped("\\n\n"), $parts);
-        $string .= $this->eol();
-        $string .= $this->indent($this->colorizeComment('"""'), $depth + 1);
+        if (substr($var, -1) !== $this->decorator->eol()) {
+            $string .= $this->eol();
+            $string .= $this->indent('', $depth + 1);
+        }
+        $string .= $this->colorizeComment('"""');
         return $string;
     }
 
