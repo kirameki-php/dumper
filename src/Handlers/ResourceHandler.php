@@ -5,6 +5,7 @@ namespace Kirameki\Dumper\Handlers;
 use SouthPointe\Ansi\Codes\Color;
 use function get_resource_id;
 use function get_resource_type;
+use function proc_get_status;
 use function stream_get_meta_data;
 
 class ResourceHandler extends Handler
@@ -31,7 +32,13 @@ class ResourceHandler extends Handler
             $this->colorizeComment("@{$id}") . ' {' .
             $this->eol();
 
-        foreach (stream_get_meta_data($var) as $key => $val) {
+        $status = match ($type) {
+            'stream' => stream_get_meta_data($var),
+            'process' => proc_get_status($var),
+            default => [],
+        };
+
+        foreach ($status as $key => $val) {
             $decoKey = $this->colorizeKey($key);
             $decoVal = $this->formatter->format($val, $depth + 1);
             $arrow = $this->colorizeDelimiter(':');
