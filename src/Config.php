@@ -10,6 +10,9 @@ use Kirameki\Dumper\Decorators\PlainDecorator;
 use ReflectionProperty;
 use const PHP_SAPI;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class Config
 {
     protected const PROPERTY_FILTER_DEFAULT =
@@ -19,9 +22,31 @@ class Config
         ReflectionProperty::IS_PRIVATE;
 
     /**
+     * @var static|null
+     */
+    protected static ?self $default;
+
+    /**
      * @var Formatter
      */
     public readonly Formatter $formatter;
+
+    /**
+     * @return static
+     */
+    public static function getDefault(): static
+    {
+        return static::$default ??= new static();
+    }
+
+    /**
+     * @param static $instance
+     * @return void
+     */
+    public static function setDefault(self $instance): void
+    {
+        static::$default = $instance;
+    }
 
     /**
      * @param Formatter|null $formatter

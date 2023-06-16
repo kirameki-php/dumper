@@ -3,6 +3,7 @@
 namespace Kirameki\Dumper\Handlers;
 
 use SouthPointe\Ansi\Codes\Color;
+use function count;
 use function explode;
 use function implode;
 use function is_bool;
@@ -16,6 +17,7 @@ use function mb_strlen;
 use function preg_replace_callback_array;
 use function sprintf;
 use function str_contains;
+use const PHP_EOL;
 
 class ScalarHandler extends Handler
 {
@@ -78,7 +80,6 @@ class ScalarHandler extends Handler
      */
     protected function handleString(string $var, int $depth): string
     {
-        $singleLine = !str_contains($var, "\n");
         $tooLong = mb_strlen($var) > $this->config->maxStringLength;
 
         // Trim the string if too long
@@ -87,40 +88,50 @@ class ScalarHandler extends Handler
             $var = mb_strcut($var, 0, $this->config->maxStringLength);
         }
 
-        // Replace control and space chars with raw string representation.
-        $decorated = (string)preg_replace_callback_array([
-            '/[\pC]/u' => fn(array $match) => $this->handleControlChar($match[0]),
-            '/[\pZ]/u' => fn(array $match) => $this->handleSpaceChar($match[0]),
-        ], $var);
+        $lines = explode(PHP_EOL, $var);
+        $lineCount = count($lines);
+
+        $multiLine = match ($lineCount) {
+            1 => false,
+            2 => $lines[1] !== '', // newline at the end don't count
+            default => true,
+        };
+
+        $decoratedLines = [];
+        for ($i = 0, $size = $lineCount; $i < $size; $i++) {
+            $line = $lines[$i];
+            $shouldIndent = !($i === $size - 1 && $line === '');
+
+            // Replace control and space chars with raw string representation.
+            $line = (string)preg_replace_callback_array([
+                '/[\pC]/u' => fn(array $match) => $this->handleControlChar($match[0]),
+                '/[\pZ]/u' => fn(array $match) => $this->handleSpaceChar($match[0]),
+            ], $line);
+
+            $line = $this->colorizeScalar($line);
+
+            $decoratedLines[] = $multiLine && $shouldIndent
+                ? $this->indentMultiLine($depth) . $line
+                : $line;
+        }
+
+        $decorated = implode($this->colorizeEscaped("\\n"), $decoratedLines);
 
         if ($tooLong) {
             $decorated .= $this->colorizeComment(' … <truncated>');
         }
 
-        if ($singleLine) {
-            return
-                $this->colorizeComment('"') .
-                $this->colorizeScalar($decorated) .
-                $this->colorizeComment('"');
+        if ($multiLine) {
+            return $this->colorizeComment('"""') .
+                $decorated .
+                $this->indentMultiLine($depth) .
+                $this->colorizeComment('"""');
         }
 
-        $string = $this->colorizeComment('"""') . $this->eol();
-        $parts = [];
-        foreach (explode("\n", $decorated) as $line) {
-            $line = $this->colorizeScalar($line);
-            // Don't indent if string is root value.
-            $parts[] = $depth !== 0
-                ? $this->indent($line, $depth + 1)
-                : $line;
-        }
-        $string .= implode($this->colorizeEscaped("\\n\n"), $parts);
-        $string .= $this->eol();
-        // Don't indent if string is root value.
-        if ($depth !== 0) {
-            $string .= $this->indent('', $depth + 1);
-        }
-        $string .= $this->colorizeComment('"""');
-        return $string;
+        return
+            $this->colorizeComment('"') .
+            $decorated .
+            $this->colorizeComment('"');
     }
 
     /**
@@ -134,7 +145,7 @@ class ScalarHandler extends Handler
             "\0" => '\0',
             "\e" => '\e',
             "\f" => '\f',
-            "\n" => "\\n\n",
+            "\n" => '\n',
             "\r" => '\r',
             "\t" => '\t',
             "\v" => '\v',
@@ -178,5 +189,19 @@ class ScalarHandler extends Handler
             $string .
             $deco->colorEnd() .
             $deco->colorStart($this->scalarColor);
+    }
+
+    /**
+     * @param int $depth
+     * @return string
+     */
+    protected function indentMultiLine(int $depth): string
+    {
+        // Indent only if string has depth
+        if ($depth !== 0) {
+            return $this->eol() . $this->indent('', $depth + 1);
+        }
+
+        return $this->eol();
     }
 }

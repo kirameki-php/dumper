@@ -26,6 +26,16 @@ class DumpTest extends TestCase
 {
     public function testSomething(): void
     {
+        $vd = new Dumper();
+
+//        dump("\nasdf\nasdf\\nabd\n");
+//        $vd->dump("\nasdf\nasdf\\nabd\n\n");
+
+        $vd->dump(["\nasdf\nasdf\\nabd\n\n"]);
+        $vd->dump(["atest"]);
+        $vd->dump(["atest\n"]);
+        //exit(0);
+
         $circular = new CircularClass();
         $circular->next = new CircularClass();
         $circular->next->next = $circular;
