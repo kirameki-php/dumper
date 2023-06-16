@@ -16,7 +16,6 @@ use function mb_strlen;
 use function preg_replace_callback_array;
 use function sprintf;
 use function str_contains;
-use function substr;
 
 class ScalarHandler extends Handler
 {
@@ -107,7 +106,7 @@ class ScalarHandler extends Handler
 
         $string = $this->colorizeComment('"""') . $this->eol();
         $parts = [];
-        foreach (explode('\n', $decorated) as $line) {
+        foreach (explode("\n", $decorated) as $line) {
             $line = $this->colorizeScalar($line);
             // Don't indent if string is root value.
             $parts[] = $depth !== 0
@@ -115,12 +114,10 @@ class ScalarHandler extends Handler
                 : $line;
         }
         $string .= implode($this->colorizeEscaped("\\n\n"), $parts);
-        if (substr($var, -1) !== $this->decorator->eol()) {
-            $string .= $this->eol();
-            // Don't indent if string is root value.
-            if ($depth !== 0) {
-                $string .= $this->indent('', $depth + 1);
-            }
+        $string .= $this->eol();
+        // Don't indent if string is root value.
+        if ($depth !== 0) {
+            $string .= $this->indent('', $depth + 1);
         }
         $string .= $this->colorizeComment('"""');
         return $string;
@@ -137,7 +134,7 @@ class ScalarHandler extends Handler
             "\0" => '\0',
             "\e" => '\e',
             "\f" => '\f',
-            "\n" => '\n',
+            "\n" => "\\n\n",
             "\r" => '\r',
             "\t" => '\t',
             "\v" => '\v',
