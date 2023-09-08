@@ -5,6 +5,34 @@ namespace Kirameki\Dumper;
 class Dumper
 {
     /**
+     * @var Dumper|null
+     */
+    protected static ?self $instance = null;
+
+    /**
+     * @param Dumper|null $instance
+     * @return self|null
+     */
+    public static function setInstance(?self $instance): ?self
+    {
+        self::$instance = $instance;
+        return $instance;
+    }
+
+    public static function getInstance(): self
+    {
+        return self::$instance ??= new self();
+    }
+
+    /**
+     * @return bool
+     */
+    public static function hasInstance(): bool
+    {
+        return self::$instance !== null;
+    }
+
+    /**
      * @param Config $config
      */
     public function __construct(
@@ -14,13 +42,15 @@ class Dumper
     }
 
     /**
-     * @param mixed $var
+     * @param mixed ...$vars
      * @return void
      */
-    public function dump(mixed $var): void
+    public function dump(mixed ...$vars): void
     {
         $config = $this->config;
-        $format = $config->formatter->format($var);
-        $config->writer->write($format);
+        foreach ($vars as $var) {
+            $format = $config->formatter->format($var);
+            $config->writer->write($format);
+        }
     }
 }

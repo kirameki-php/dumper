@@ -6,13 +6,11 @@ use Kirameki\Dumper\Dumper;
 if (!function_exists('dump'))
 {
     /**
-     * @param mixed $var
-     * @param Config|null $config
+     * @param mixed ...$vars
      * @return void
      */
-    function dump(mixed $var, ?Config $config = null): void
+    function dump(mixed ...$vars): void
     {
-        $dumper = new Dumper(config: $config ?? new Config());
-        $dumper->dump($var);
+        Dumper::getInstance()->dump(...$vars);
     }
 }
