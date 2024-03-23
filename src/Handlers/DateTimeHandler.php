@@ -3,6 +3,7 @@
 namespace Kirameki\Dumper\Handlers;
 
 use DateTime;
+use Kirameki\Dumper\ObjectTracker;
 
 class DateTimeHandler extends ClassHandler
 {
@@ -10,7 +11,7 @@ class DateTimeHandler extends ClassHandler
      * @param DateTime $var
      * @inheritDoc
      */
-    public function handle(object $var, int $id, int $depth, array $objectIds): string
+    public function handle(object $var, int $id, int $depth, ObjectTracker $tracker): string
     {
         return
             $this->colorizeName($var::class) . ' ' .

@@ -63,7 +63,7 @@ class Config
         public readonly ?string $decorator = null,
         public readonly int $indentSize = 2,
         public readonly int $maxStringLength = 5000,
-        public readonly string $dateTimeFormat = 'Y-m-d H:i:s.u T (P)',
+        public readonly string $dateTimeFormat = 'Y-m-d H:i:s.uP',
         public readonly int $propertyFilter = self::PROPERTY_FILTER_DEFAULT,
         public readonly DebugInfo $debugInfo = DebugInfo::Overwrite,
         public readonly Writer $writer = new Writer(),

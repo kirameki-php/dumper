@@ -2,6 +2,7 @@
 
 namespace Kirameki\Dumper\Handlers;
 
+use Kirameki\Dumper\ObjectTracker;
 use Throwable;
 use function count;
 use function method_exists;
@@ -15,7 +16,7 @@ class ThrowableHandler extends ClassHandler
      * @param Throwable $var
      * @inheritDoc
      */
-    public function handle(object $var, int $id, int $depth, array $objectIds): string
+    public function handle(object $var, int $id, int $depth, ObjectTracker $tracker): string
     {
         $summary =
             $this->colorizeName($var::class) . ' ' .
@@ -27,7 +28,7 @@ class ThrowableHandler extends ClassHandler
             $this->handleFile($var, $depth + 1) .
             $this->handleLine($var, $depth + 1) .
             $this->handleTrace($var, $depth + 1) .
-            $this->handleContext($var, $depth + 1, $objectIds);
+            $this->handleContext($var, $depth + 1, $tracker);
 
         return $summary . $string;
     }
@@ -108,10 +109,10 @@ class ThrowableHandler extends ClassHandler
     /**
      * @param Throwable $var
      * @param int $depth
-     * @param array<int, bool> $objectIds
+     * @param ObjectTracker $tracker
      * @return string
      */
-    protected function handleContext(Throwable $var, int $depth, array $objectIds): string
+    protected function handleContext(Throwable $var, int $depth, ObjectTracker $tracker): string
     {
         if (!method_exists($var, 'getContext')) {
             return '';
@@ -122,7 +123,7 @@ class ThrowableHandler extends ClassHandler
                 $this->colorizeKey('context') .
                 $this->colorizeDelimiter(':') . ' ' .
                 $this->formatter->format(
-                    $var->getContext(), $depth, $objectIds,
+                    $var->getContext(), $depth, $tracker,
                 ),
                 $depth,
             );

@@ -2,6 +2,7 @@
 
 namespace Kirameki\Dumper\Handlers;
 
+use Kirameki\Dumper\ObjectTracker;
 use UnitEnum;
 
 class EnumHandler extends ClassHandler
@@ -10,7 +11,7 @@ class EnumHandler extends ClassHandler
      * @param UnitEnum $var
      * @inheritDoc
      */
-    public function handle(object $var, int $id, int $depth, array $objectIds): string
+    public function handle(object $var, int $id, int $depth, ObjectTracker $tracker): string
     {
         return
             $this->colorizeName($var::class . "::{$var->name}") . ' ' .

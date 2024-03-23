@@ -3,6 +3,7 @@
 namespace Kirameki\Dumper\Handlers;
 
 use Closure;
+use Kirameki\Dumper\ObjectTracker;
 use ReflectionFunction;
 use function assert;
 
@@ -12,7 +13,7 @@ class ClosureHandler extends ClassHandler
      * @param Closure $var
      * @inheritDoc
      */
-    public function handle(object $var, int $id, int $depth, array $objectIds): string
+    public function handle(object $var, int $id, int $depth, ObjectTracker $tracker): string
     {
         assert($var instanceof Closure);
 

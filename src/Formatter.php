@@ -51,16 +51,18 @@ class Formatter
     /**
      * @param mixed $var
      * @param int $depth
-     * @param array<int, bool> $objectIds
+     * @param ObjectTracker|null $tracker
      * @return string
      */
-    public function format(mixed $var, int $depth = 0, array $objectIds = []): string
+    public function format(mixed $var, int $depth = 0, ObjectTracker $tracker = null): string
     {
+        $tracker ??= new ObjectTracker();
+
         $string = match (true) {
             is_null($var) => $this->formatNull(),
             is_scalar($var) => $this->formatScalar($var, $depth),
-            is_object($var) => $this->formatObject($var, $depth, $objectIds),
-            is_array($var) => $this->formatArray($var, $depth, $objectIds),
+            is_object($var) => $this->formatObject($var, $depth, $tracker),
+            is_array($var) => $this->formatArray($var, $depth, $tracker),
             is_resource($var) => $this->formatResource($var, $depth),
             default => $this->formatUnknown($var, $depth),
         };
@@ -93,25 +95,25 @@ class Formatter
     /**
      * @param array<mixed> $var
      * @param int $depth
-     * @param array<int, bool> $objectIds
+     * @param ObjectTracker $tracker
      * @return string
      */
-    protected function formatArray(array $var, int $depth, array $objectIds): string
+    protected function formatArray(array $var, int $depth, ObjectTracker $tracker): string
     {
         $handler = $this->arrayHandler ??= new ArrayHandler($this, $this->decorator, $this->config);
-        return $handler->handle($var, $depth, $objectIds);
+        return $handler->handle($var, $depth, $tracker);
     }
 
     /**
      * @param object $var
      * @param int $depth
-     * @param array<int, bool> $objectIds
+     * @param ObjectTracker $tracker
      * @return string
      */
-    protected function formatObject(object $var, int $depth, array $objectIds): string
+    protected function formatObject(object $var, int $depth, ObjectTracker $tracker): string
     {
         $id = spl_object_id($var);
-        return $this->getClassHandler($var)->handle($var, $id, $depth, $objectIds);
+        return $this->getClassHandler($var)->handle($var, $id, $depth, $tracker);
     }
 
     /**

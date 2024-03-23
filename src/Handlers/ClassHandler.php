@@ -3,6 +3,7 @@
 namespace Kirameki\Dumper\Handlers;
 
 use Kirameki\Dumper\Configs\DebugInfo;
+use Kirameki\Dumper\ObjectTracker;
 use ReflectionObject;
 use ReflectionProperty;
 use SouthPointe\Ansi\Codes\Color;
@@ -17,10 +18,10 @@ class ClassHandler extends Handler
      * @param object $var
      * @param int $id
      * @param int $depth
-     * @param array<int, bool> $objectIds
+     * @param ObjectTracker $tracker
      * @return string
      */
-    public function handle(object $var, int $id, int $depth, array $objectIds): string
+    public function handle(object $var, int $id, int $depth, ObjectTracker $tracker): string
     {
         $properties = $this->getProperties(clone $var);
 
@@ -32,27 +33,30 @@ class ClassHandler extends Handler
             return $summary;
         }
 
-        if (array_key_exists($id, $objectIds)) {
+        if ($tracker->isProcessed($id)) {
+            $word = $tracker->isCircular($id) ? 'circular' : 'redundant';
             return
                 $summary . ' ' .
-                $this->colorizeComment('<circular>') . ' ' .
+                $this->colorizeComment("<{$word}>") . ' ' .
                 '{ ' .
                 $this->colorizeComment('⋯') .
                 ' }';
         }
 
-        $objectIds[$id] ??= true;
+        $tracker->markAsProcessed($id);
 
         $string = "{$summary} {" . $this->eol();
         foreach ($properties as $key => $val) {
             $string .= $this->line(
                 $this->colorizeKey($key) .
                 $this->colorizeDelimiter(':') . ' ' .
-                $this->formatter->format($val, $depth + 1, $objectIds),
+                $this->formatter->format($val, $depth + 1, $tracker),
                 $depth + 1,
             );
         }
         $string .= $this->indent('}', $depth);
+
+        $tracker->clearCircular($id);
 
         return $string;
     }

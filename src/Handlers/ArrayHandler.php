@@ -2,6 +2,7 @@
 
 namespace Kirameki\Dumper\Handlers;
 
+use Kirameki\Dumper\ObjectTracker;
 use ReflectionReference;
 use SouthPointe\Ansi\Codes\Color;
 use function array_is_list;
@@ -12,10 +13,10 @@ class ArrayHandler extends Handler
     /**
      * @param array<mixed> $var
      * @param int $depth
-     * @param array<int, bool> $objectIds
+     * @param ObjectTracker $tracker
      * @return string
      */
-    public function handle(array $var, int $depth, array $objectIds): string
+    public function handle(array $var, int $depth, ObjectTracker $tracker): string
     {
         $start = '[';
         $end = ']';
@@ -29,7 +30,7 @@ class ArrayHandler extends Handler
         $isList = array_is_list($var);
         foreach ($var as $key => $val) {
             $decoKey = $this->colorizeKey($isList ? $key : "\"{$key}\"");
-            $decoVal = $this->formatter->format($val, $depth + 1, $objectIds);
+            $decoVal = $this->formatter->format($val, $depth + 1, $tracker);
             $ref = $this->colorizeRefSymbol($this->isRef($var, $key) ? '&' : '');
             $arrow = $this->colorizeDelimiter('=>');
             $string .= $this->line("{$decoKey} {$arrow} {$ref}{$decoVal}", $depth + 1);
