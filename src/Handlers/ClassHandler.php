@@ -34,7 +34,7 @@ class ClassHandler extends Handler
         }
 
         if ($tracker->isProcessed($id)) {
-            $word = $tracker->isCircular($id) ? 'circular' : "recap #{$tracker->getProcessedCount($id)}";
+            $word = $tracker->isCircular($id) ? 'circular' : "recap {$tracker->getProcessedCount($id)}";
             return
                 $summary . ' ' .
                 $this->colorizeComment("<{$word}>") . ' ' .
