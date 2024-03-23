@@ -23,6 +23,7 @@ class ObjectTracker
      */
     public function markAsProcessed(int $id): void
     {
+        $this->processedIds[$id] ??= 0;
         $this->processedIds[$id] += 1;
         $this->circularIds[$id] = true;
     }
