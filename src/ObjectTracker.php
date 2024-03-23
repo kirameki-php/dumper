@@ -7,7 +7,7 @@ use function array_key_exists;
 class ObjectTracker
 {
     /**
-     * @param array<int, true> $processedIds
+     * @param array<int, int> $processedIds
      * @param array<int, true> $circularIds
      */
     public function __construct(
@@ -17,15 +17,32 @@ class ObjectTracker
     {
     }
 
+    /**
+     * @param int $id
+     * @return void
+     */
     public function markAsProcessed(int $id): void
     {
-        $this->processedIds[$id] = true;
+        $this->processedIds[$id] += 1;
         $this->circularIds[$id] = true;
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function isProcessed(int $id): bool
     {
         return array_key_exists($id, $this->processedIds);
+    }
+
+    /**
+     * @param int $id
+     * @return int
+     */
+    public function getProcessedCount(int $id): int
+    {
+        return $this->processedIds[$id] ?? 0;
     }
 
     /**
