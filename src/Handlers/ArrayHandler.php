@@ -25,9 +25,14 @@ class ArrayHandler extends Handler
             return "{$start}{$end}";
         }
 
+        $isList = array_is_list($var);
+
+        if ($isList && count($var) === 1) {
+            return $start . $this->formatter->format($var[0], 0, $tracker) . $end;
+        }
+
         $string = $start . $this->eol();
 
-        $isList = array_is_list($var);
         foreach ($var as $key => $val) {
             $decoKey = $this->colorizeKey($isList ? $key : "\"{$key}\"");
             $decoVal = $this->formatter->format($val, $depth + 1, $tracker);
