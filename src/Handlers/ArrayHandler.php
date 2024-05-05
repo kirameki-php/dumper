@@ -28,7 +28,7 @@ class ArrayHandler extends Handler
         $isList = array_is_list($var);
 
         if ($isList && count($var) === 1) {
-            return $start . $this->formatter->format($var[0], 0, $tracker) . $end;
+            return $start . $this->formatter->format($var[0], $depth + 1, $tracker) . $end;
         }
 
         $string = $start . $this->eol();
