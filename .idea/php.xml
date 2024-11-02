@@ -45,7 +45,7 @@
   </component>
   <component name="PhpInterpreters">
     <interpreters>
-      <interpreter id="b58ad43c-e758-4c80-b3b9-19d7a4bcfc49" name="app:latest" home="docker://DATA" false="false" debugger_id="php.debugger.XDebug">
+      <interpreter id="b58ad43c-e758-4c80-b3b9-19d7a4bcfc49" name="app:latest" home="docker://DATA" auto="false" debugger_id="php.debugger.XDebug">
         <remote_data INTERPRETER_PATH="php" HELPERS_PATH="/opt/.phpstorm_helpers" VALID="true" RUN_AS_ROOT_VIA_SUDO="false" DOCKER_ACCOUNT_NAME="Docker" DOCKER_IMAGE_NAME="dumper-app:latest" DOCKER_REMOTE_PROJECT_PATH="/opt/project" />
       </interpreter>
     </interpreters>
@@ -101,7 +101,7 @@
       </interpreter>
     </phpInfoCache>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.3" />
   <component name="PhpStan">
     <PhpStan_settings>
       <PhpStanConfiguration tool_path="$PROJECT_DIR$/vendor/bin/phpstan" timeout="60000" />

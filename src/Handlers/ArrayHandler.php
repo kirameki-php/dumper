@@ -7,6 +7,7 @@ use ReflectionReference;
 use SouthPointe\Ansi\Codes\Color;
 use function array_is_list;
 use function count;
+use function is_scalar;
 
 class ArrayHandler extends Handler
 {
@@ -27,7 +28,7 @@ class ArrayHandler extends Handler
 
         $isList = array_is_list($var);
 
-        if ($isList && count($var) === 1) {
+        if ($isList && count($var) === 1 && is_scalar($var[0])) {
             return $start . $this->formatter->format($var[0], $depth + 1, $tracker) . $end;
         }
 
