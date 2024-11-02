@@ -3,7 +3,7 @@
 namespace Kirameki\Dumper;
 
 use Closure;
-use DateTime;
+use DateTimeInterface;
 use Kirameki\Dumper\Decorators\Decorator;
 use Kirameki\Dumper\Handlers\ArrayHandler;
 use Kirameki\Dumper\Handlers\ClassHandler;
@@ -182,7 +182,7 @@ class Formatter
     {
         return [
             Closure::class => fn() => new ClosureHandler($this, $this->decorator, $this->config),
-            DateTime::class => fn() => new DateTimeHandler($this, $this->decorator, $this->config),
+            DateTimeInterface::class => fn() => new DateTimeHandler($this, $this->decorator, $this->config),
             Throwable::class => fn() => new ThrowableHandler($this, $this->decorator, $this->config),
             UnitEnum::class => fn() => new EnumHandler($this, $this->decorator, $this->config),
         ];
