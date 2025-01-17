@@ -5,7 +5,6 @@ namespace Kirameki\Dumper\Handlers;
 use Closure;
 use Kirameki\Dumper\ObjectTracker;
 use ReflectionFunction;
-use function assert;
 
 class ClosureHandler extends ClassHandler
 {
@@ -15,8 +14,6 @@ class ClosureHandler extends ClassHandler
      */
     public function handle(object $var, int $id, int $depth, ObjectTracker $tracker): string
     {
-        assert($var instanceof Closure);
-
         $ref = new ReflectionFunction($var);
 
         if ($file = $ref->getFileName()) {

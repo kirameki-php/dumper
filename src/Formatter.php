@@ -54,7 +54,7 @@ class Formatter
      * @param ObjectTracker|null $tracker
      * @return string
      */
-    public function format(mixed $var, int $depth = 0, ObjectTracker $tracker = null): string
+    public function format(mixed $var, int $depth = 0, ?ObjectTracker $tracker = null): string
     {
         $tracker ??= new ObjectTracker();
 
