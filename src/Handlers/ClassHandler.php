@@ -2,12 +2,13 @@
 
 namespace Kirameki\Dumper\Handlers;
 
+use Error;
 use Kirameki\Dumper\Configs\DebugInfo;
 use Kirameki\Dumper\ObjectTracker;
+use Kirameki\Dumper\Placeholder;
 use ReflectionObject;
 use ReflectionProperty;
 use SouthPointe\Ansi\Codes\Color;
-use function array_key_exists;
 use function array_merge;
 use function count;
 use function method_exists;
@@ -87,8 +88,7 @@ class ClassHandler extends Handler
                 ? 'static '
                 : '';
             $name = $access . $reflection->getName();
-            $value = $reflection->getValue($var);
-            $properties[$name] = $value;
+            $properties[$name] = $this->getPropertyValue($var, $reflection);
         }
 
         if ($debugInfoOption === DebugInfo::Append) {
@@ -99,6 +99,23 @@ class ClassHandler extends Handler
         }
 
         return $properties;
+    }
+
+    /**
+     * @param object $var
+     * @param ReflectionProperty $reflection
+     * @return mixed
+     */
+    protected function getPropertyValue(object $var, ReflectionProperty $reflection): mixed
+    {
+        try {
+            return $reflection->getValue($var);
+        } catch (Error $error) {
+            if ($this->isUninitializedPropertyError($error, $reflection)) {
+                return Placeholder::Uninitialized;
+            }
+            throw $error;
+        }
     }
 
     /**
@@ -121,5 +138,15 @@ class ClassHandler extends Handler
     protected function colorizeName(string $name): string
     {
         return $this->colorize($name, Color::DarkCyan);
+    }
+
+    /**
+     * @param Error $error
+     * @param ReflectionProperty $ref
+     * @return bool
+     */
+    protected function isUninitializedPropertyError(Error $error, ReflectionProperty $ref): bool
+    {
+        return $error->getMessage() === "Typed property {$ref->class}::\${$ref->name} must not be accessed before initialization";
     }
 }

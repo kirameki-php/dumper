@@ -12,6 +12,7 @@ use Kirameki\Dumper\Handlers\ClosureHandler;
 use Kirameki\Dumper\Handlers\DateTimeHandler;
 use Kirameki\Dumper\Handlers\EnumHandler;
 use Kirameki\Dumper\Handlers\NullHandler;
+use Kirameki\Dumper\Handlers\PlaceholderHandler;
 use Kirameki\Dumper\Handlers\ResourceHandler;
 use Kirameki\Dumper\Handlers\ScalarHandler;
 use Kirameki\Dumper\Handlers\ThrowableHandler;
@@ -184,6 +185,7 @@ class Formatter
             Closure::class => fn() => new ClosureHandler($this, $this->decorator, $this->config),
             DateTimeInterface::class => fn() => new DateTimeHandler($this, $this->decorator, $this->config),
             Throwable::class => fn() => new ThrowableHandler($this, $this->decorator, $this->config),
+            Placeholder::class => fn() => new PlaceholderHandler($this, $this->decorator, $this->config),
             UnitEnum::class => fn() => new EnumHandler($this, $this->decorator, $this->config),
         ];
     }
