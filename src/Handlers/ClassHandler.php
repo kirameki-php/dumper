@@ -84,11 +84,14 @@ class ClassHandler extends Handler
 
         $properties = [];
         foreach ($propertyReflections as $reflection) {
-            $access = ($reflection->getModifiers() & ReflectionProperty::IS_STATIC)
-                ? 'static '
-                : '';
-            $name = $access . $reflection->getName();
-            $properties[$name] = $this->getPropertyValue($var, $reflection);
+            if ($reflection->isVirtual()) {
+                continue;
+            }
+
+            $name = $this->getPropertyName($reflection);
+            $value = $this->getPropertyValue($var, $reflection);
+
+            $properties[$name] = $value;
         }
 
         if ($debugInfoOption === DebugInfo::Append) {
@@ -101,6 +104,14 @@ class ClassHandler extends Handler
         return $properties;
     }
 
+    protected function getPropertyName(ReflectionProperty $reflection): string
+    {
+        $access = ($reflection->getModifiers() & ReflectionProperty::IS_STATIC)
+            ? 'static '
+            : '';
+        return $access . $reflection->getName();
+    }
+
     /**
      * @param object $var
      * @param ReflectionProperty $reflection
@@ -108,14 +119,9 @@ class ClassHandler extends Handler
      */
     protected function getPropertyValue(object $var, ReflectionProperty $reflection): mixed
     {
-        try {
-            return $reflection->getValue($var);
-        } catch (Error $error) {
-            if ($this->isUninitializedPropertyError($error, $reflection)) {
-                return Placeholder::Uninitialized;
-            }
-            throw $error;
-        }
+        return $reflection->isInitialized($var)
+            ? $reflection->getValue($var)
+            : Placeholder::Uninitialized;
     }
 
     /**
